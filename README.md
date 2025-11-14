@@ -12,31 +12,32 @@ Three main pipeline families have been tested:
 * **Hybrid**: preprocessing → LLM recognition
 * **Direct**: raw image → LLM recognition
 
-Below are sample images used for experimentation:
+This is sample image used for experimentation:
 
-<img src="docs/img/letter.jpg" height="400">
-<img src="docs/img/letter.jpg" height="400">
-<img src="docs/img/letter.jpg" height="400">
+<div align="center">
+  <img src="docs/img/letter.jpg" height="500">
+</div>
 
 
 ## Pipeline steps
 
 ### Preprocessing
 
-The preprocessing module applies transformations designed to normalize, denoise, and enhance handwriting before OCR or LLM inference. Steps include:
+The preprocessing module applies transformations designed to normalize, denoise, and enhance handwriting before OCR or LLM inference.
+The pipeline works as follows:
 
-> COMPROBAR
-
-1. Grayscale conversion
-2. Adaptive thresholding (multiple strategies available)
-3. Noise removal and smoothing
-4. Contrast normalization
-5. Optional morphological operations for stroke clarity
+1. **Optional resizing**: The input image can be resized so that its longest side is at most a fixed maximum, preserving aspect ratio. This keeps resolution under control for OCR/LLM models.
+2. **Text-mask estimation on the blue channel**: The RGB image is split into channels and the blue channel is smoothed (Gaussian blur) and background-flattened using a large median filter. An automatic Otsu threshold is then applied on this normalized blue channel to obtain a binary mask where text ≈ foreground and paper ≈ background.
+3. **Noise removal and smoothing**: Small connected components below a minimum area are removed, and a morphological closing operation is applied to fill gaps and connect strokes, reducing background noise and bleed-through artifacts.
+4. **Grayscale conversion and contrast normalization**: The original image is converted to grayscale. Optionally, histogram equalization is applied inside the text regions to normalize contrast and make strokes more legible.
+5. **Morphological refinement and compositing**: The text mask is slightly dilated to better cover thin strokes. The final preprocessed image is built by keeping the enhanced grayscale values where the mask indicates text and setting the background to white, then converting back to RGB.
 
 A **visual gridsearch** is provided to compare preprocessing combinations.
 See the tutorial: **[Preprocessing Gridsearch](docs/prepro_gs.md)**.
 
-<img src="./docs/img/letter_prepro_subplots_sample.png">
+<div align="center">
+  <img src="./docs/img/letter_prepro_subplots_sample.png">
+</div>
 
 
 ### OCR-based Transcription
@@ -55,7 +56,9 @@ The **PaddleOCR** detection module is used to localize text regions within the h
 2. A configurable **detection gridsearch** is included to visually compare thresholds, DB parameters, and post-processing settings.
    See: **[Detection Gridsearch](docs/detection_gs.md)**.
 
-<img src="./docs/img/letter_detect_subplots_sample.png">
+<div align="center">
+  <img src="./docs/img/letter_detect_subplots_sample.png">
+</div>
 
 
 #### Recognition
@@ -80,19 +83,19 @@ This pipeline performs transcription using **OpenAI Vision models**, which allow
 Unlike the OCR-based workflow, these models do not require explicit text detection, line segmentation, or classical preprocessing—recognition is handled holistically by the multimodal transformer.
 
 For execution details, see the
-**[LLM Inference Tutorial](docs/execute_inference.md#LLM-Inference)**
+**[LLM Inference Tutorial](docs/execute_inference.md#LLM-Inference)**.
 
 
 ### Validation
 
 Evaluation uses standard text recognition metrics widely used in OCR and handwriting research. These metrics quantify transcription quality at different levels of granularity:
 
-* **CER — Character Error Rate**[<sup>[1]</sup>](#ref-CER-WER):
+* **CER — Character Error Rate**:
   Measures the proportion of character-level errors between the predicted transcription and the ground truth.
   Computed as the Levenshtein distance (substitutions, insertions, deletions) divided by the total number of characters in the ground truth.
   CER is sensitive to small mistakes such as accents, punctuation, or missing letters, making it a fine-grained metric.
 
-* **WER — Word Error Rate**[<sup>[1]</sup>](#ref-CER-WER):
+* **WER — Word Error Rate**:
   Similar to CER but applied at the word level.
   WER captures higher-level errors that affect semantic meaning, such as incorrect words, merged/split words, or missing words.
   It is the main metric typically prioritized in handwriting and OCR evaluation.
@@ -108,9 +111,5 @@ Evaluation uses standard text recognition metrics widely used in OCR and handwri
   Line-CER is particularly informative when evaluating detection + recognition pipelines in which line segmentation may introduce line-level inconsistencies.
 
 For execution details, see the
-**[Evaluation Tutorial](docs/execute_evaluation.md)**
+**[Evaluation Tutorial](docs/execute_evaluation.md)**.
 
-
-## References
-
-1. <a id="ref-CER-WER"></a>Ul-Hasan, A., et al. “Evaluating OCR Models with CER/WER.” *ICFHR*._
