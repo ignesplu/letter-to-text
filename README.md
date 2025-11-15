@@ -68,7 +68,7 @@ This model is a Spanish-specialized version of Microsoft’s TrOCR architecture,
 
 Other recognition or document-understanding models can be plugged into the pipeline with minimal code changes:
 
-* 🤗 [**microsoft/trocr-base-handwritten**](https://huggingface.co/microsoft/trocr-base-handwritten)
+* 🤗 [**microsoft/trocr-base-handwritten**](https://huggingface.co/microsoft/trocr-base-handwritten) (raw or fine-tuned)
 * 🤗 [**SCUT-DLVCLab/lilt-roberta-en-base**](https://huggingface.co/SCUT-DLVCLab/lilt-roberta-en-base) (raw or fine-tuned)
 * 🤗 [**naver-clova-ix/donut-base-finetuned-cord-v2**](https://huggingface.co/naver-clova-ix/donut-base-finetuned-cord-v2) (raw or fine-tuned)
 * 🤗 [**PaddlePaddle/PaddleOCR-VL**](https://huggingface.co/PaddlePaddle/PaddleOCR-VL) (raw or fine-tuned)
