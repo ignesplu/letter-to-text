@@ -2,21 +2,21 @@ from PIL import Image
 from openai import OpenAI
 
 # Constants
-from src.cons import (
+from .cons import (
     AVAILABLE_INFERENCE_TYPES,
     DEFAULT_PREPRO_ARGS,
     DEFAULT_SYS_PROMPT,
     DEFAULT_USER_PROMPT
 )
 # Preprocessing
-from src.prepro import resize_long_side, preprocess_pipeline, image_to_np_rgb
+from .prepro import resize_long_side, preprocess_pipeline, image_to_np_rgb
 # Model Inference
-from src.models.detection import load_detection_model
-from src.models.recognition import load_recognition_model, recognize_text
-from src.models.llm import req_api, response_tokens_cost
-from src.models.utils import image_to_bytes, extract_boxes_from_res, sanitize_box, sort_and_merge_boxes, crop_box_safe
+from .models.detection import load_detection_model
+from .models.recognition import load_recognition_model, recognize_text
+from .models.llm import req_api, response_tokens_cost
+from .models.utils import image_to_bytes, extract_boxes_from_res, sanitize_box, sort_and_merge_boxes, crop_box_safe
 # Validation
-from src.validation import evaluate_document, explain_results
+from .validation import evaluate_document, explain_results
 
 
 class Letter2TextInference:
