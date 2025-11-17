@@ -23,7 +23,10 @@ def req_api(client, img_b64, img_format: str = 'jpeg', model: str = "gpt-5.1", s
                     ],
                 },
             ],
-            temperature=0  # Para transcripción exacta
+            temperature=0,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
         )
     else:
         return client.chat.completions.create(
@@ -40,7 +43,10 @@ def req_api(client, img_b64, img_format: str = 'jpeg', model: str = "gpt-5.1", s
                     ]
                 }
             ],
-            temperature=0  # Para transcripción exacta
+            temperature=0,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
         )
 
 
